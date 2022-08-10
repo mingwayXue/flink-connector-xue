@@ -1,4 +1,4 @@
-package com.xue.bigdata.test;
+package com.xue.bigdata.test.connector;
 
 import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.api.java.typeutils.ResultTypeQueryable;
