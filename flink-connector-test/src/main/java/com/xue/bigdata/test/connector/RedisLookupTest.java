@@ -3,6 +3,7 @@ package com.xue.bigdata.test.connector;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.api.java.typeutils.ResultTypeQueryable;
 import org.apache.flink.api.java.typeutils.RowTypeInfo;
+import org.apache.flink.api.java.utils.ParameterTool;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.TimeCharacteristic;
 import org.apache.flink.streaming.api.datastream.DataStreamSource;
@@ -19,7 +20,7 @@ import org.apache.flink.types.Row;
  */
 public class RedisLookupTest {
     public static void main(String[] args) throws Exception {
-
+        ParameterTool parameter = ParameterTool.fromPropertiesFile(RedisLookupTest.class.getClassLoader().getResourceAsStream("application.properties"));
         StreamExecutionEnvironment env = StreamExecutionEnvironment.createLocalEnvironmentWithWebUI(new Configuration());
         env.setParallelism(1);
         env.setStreamTimeCharacteristic(TimeCharacteristic.ProcessingTime);
@@ -38,9 +39,9 @@ public class RedisLookupTest {
                 "    score BIGINT\n" +
                 ") WITH (\n" +
                 "    'connector' = 'redis', -- 指定 connector 是 redis 类型的\n" +
-                "    'hostname' = 'test-redis-qcloud.heyteago.com', -- redis server ip\n" +
+                "    'hostname' = '"+parameter.get("redis.host")+"', -- redis server ip\n" +
                 "    'port' = '6391', -- redis server 端口\n" +
-                "    'password' = 'itRK6YHBKBd2ETu8',\n" +
+                "    'password' = '"+parameter.get("redis.password")+"',\n" +
                 "    'format' = 'json', -- 指定 format 解析格式\n" +
                 "    'lookup.cache.max-rows' = '500', -- guava local cache 最大条目\n" +
                 "    'lookup.cache.ttl' = '3600', -- guava local cache ttl\n" +

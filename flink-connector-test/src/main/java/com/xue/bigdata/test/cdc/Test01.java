@@ -5,12 +5,13 @@ import com.ververica.cdc.connectors.mysql.table.StartupOptions;
 import com.xue.bigdata.test.util.DebeziumRecord;
 import com.xue.bigdata.test.util.HeyteaDebeziumDeserializationSchema;
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
+import org.apache.flink.api.java.utils.ParameterTool;
 import org.apache.flink.streaming.api.datastream.DataStreamSource;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 
 public class Test01 {
     public static void main(String[] args) throws Exception {
-
+        ParameterTool parameter = ParameterTool.fromPropertiesFile(Test01.class.getClassLoader().getResourceAsStream("application.properties"));
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 //        env.enableCheckpointing(30000, CheckpointingMode.EXACTLY_ONCE);
 //        env.setStateBackend(new HashMapStateBackend());
@@ -20,12 +21,12 @@ public class Test01 {
         env.setParallelism(1);
 
         MySqlSource<DebeziumRecord> mySqlSource = MySqlSource.<DebeziumRecord>builder()
-                .hostname("10.21.4.17")
+                .hostname(parameter.get("db.host"))
                 .port(3306)
                 .databaseList("platform")
                 .tableList("platform.fc01")
-                .username("platform")
-                .password("platform@Heytea2021")
+                .username(parameter.get("db.username"))
+                .password(parameter.get("db.password"))
                 .scanNewlyAddedTableEnabled(true)
                 .serverTimeZone("Asia/Shanghai")
                 .startupOptions(StartupOptions.initial())

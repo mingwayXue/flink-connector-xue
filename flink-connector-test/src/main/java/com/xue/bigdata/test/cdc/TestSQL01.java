@@ -1,11 +1,13 @@
 package com.xue.bigdata.test.cdc;
 
+import org.apache.flink.api.java.utils.ParameterTool;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.table.api.bridge.java.StreamTableEnvironment;
 
 public class TestSQL01 {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
+        ParameterTool parameter = ParameterTool.fromPropertiesFile(TestSQL01.class.getClassLoader().getResourceAsStream("application.properties"));
         StreamExecutionEnvironment env = StreamExecutionEnvironment.createLocalEnvironmentWithWebUI(new Configuration());
         env.setParallelism(1);
         StreamTableEnvironment tableEnv = StreamTableEnvironment.create(env);
@@ -22,7 +24,7 @@ public class TestSQL01 {
                 ") WITH (\n" +
                 "  'connector' = 'kafka',\n" +
                 "  'topic' = 'ods_db_production__mt_orders',\n" +
-                "  'properties.bootstrap.servers' = '10.6.5.93:9092',\n" +
+                "  'properties.bootstrap.servers' = '" + parameter.get("bootstrap.servers") + "',\n" +
                 "  'properties.group.id' = 'test-xue',\n" +
                 "  'scan.startup.mode' = 'timestamp',\n" +
                 "  'scan.startup.timestamp-millis' = '1660096800000',\n" +
