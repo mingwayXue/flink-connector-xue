@@ -1,39 +1,41 @@
-//package com.xue.bigdata.test.cdc;
-//
-//
-//import com.ververica.cdc.connectors.mysql.source.MySqlSource;
-//import com.ververica.cdc.connectors.mysql.table.StartupOptions;
-//import com.ververica.cdc.debezium.JsonDebeziumDeserializationSchema;
-//import org.apache.flink.api.common.eventtime.WatermarkStrategy;
-//import org.apache.flink.streaming.api.datastream.DataStreamSource;
-//import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
-//
-///**
-// * @author: mingway
-// * @date: 2022/7/18 11:05 PM
-// */
-//public class Test01 {
-//    public static void main(String[] args) throws Exception {
-//        MySqlSource<String> mySqlSource = MySqlSource.<String>builder()
-//                .hostname("10.21.4.17")
-//                .port(3306)
-//                .databaseList("platform") // set captured database
-//                .tableList("platform.fc01") // set captured table
-//                .username("platform")
-//                .password("platform@Heytea2021")
-//                .splitSize(1)
-//                .serverId("5401")
-//                .startupOptions(StartupOptions.initial())
-//                .deserializer(new JsonDebeziumDeserializationSchema()) // converts SourceRecord to JSON String
-//                .build();
-//        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
-//        env.setParallelism(1);
-//
-//        DataStreamSource<String> dataStreamSource = env.fromSource(mySqlSource, WatermarkStrategy.noWatermarks(), "MYSQL_SOURCE");
-//
-//        dataStreamSource.printToErr();
-//
-//        env.execute("TT");
-//
-//    }
-//}
+package com.xue.bigdata.test.cdc;
+
+import com.ververica.cdc.connectors.mysql.source.MySqlSource;
+import com.ververica.cdc.connectors.mysql.table.StartupOptions;
+import com.xue.bigdata.test.util.DebeziumRecord;
+import com.xue.bigdata.test.util.HeyteaDebeziumDeserializationSchema;
+import org.apache.flink.api.common.eventtime.WatermarkStrategy;
+import org.apache.flink.streaming.api.datastream.DataStreamSource;
+import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
+
+public class Test01 {
+    public static void main(String[] args) throws Exception {
+
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+//        env.enableCheckpointing(30000, CheckpointingMode.EXACTLY_ONCE);
+//        env.setStateBackend(new HashMapStateBackend());
+//        env.getCheckpointConfig().setCheckpointStorage("file:///bigdata/flink-1.14.4/chk-dirs/test01");
+//        env.getCheckpointConfig().setMaxConcurrentCheckpoints(1);
+//        env.getCheckpointConfig().setExternalizedCheckpointCleanup(CheckpointConfig.ExternalizedCheckpointCleanup.RETAIN_ON_CANCELLATION);
+        env.setParallelism(1);
+
+        MySqlSource<DebeziumRecord> mySqlSource = MySqlSource.<DebeziumRecord>builder()
+                .hostname("10.21.4.17")
+                .port(3306)
+                .databaseList("platform")
+                .tableList("platform.fc01")
+                .username("platform")
+                .password("platform@Heytea2021")
+                .scanNewlyAddedTableEnabled(true)
+                .serverTimeZone("Asia/Shanghai")
+                .startupOptions(StartupOptions.initial())
+                .deserializer(new HeyteaDebeziumDeserializationSchema())
+                .build();
+
+        DataStreamSource<DebeziumRecord> source = env.fromSource(mySqlSource, WatermarkStrategy.noWatermarks(), "SOURCE");
+
+        source.printToErr();
+
+        env.execute("Test01");
+    }
+}

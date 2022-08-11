@@ -18,12 +18,12 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import static org.apache.kafka.common.utils.Utils.mkSet;
 
@@ -107,12 +107,24 @@ public class HeyteaJsonConverter implements Converter, HeaderConverter {
                 case INT32:
                     if ("io.debezium.time.Date".equals(schema.name())) {
                         return JSON_NODE_FACTORY.textNode(LocalDate.ofEpochDay((Integer) value).format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
-                    } else {
+                    } else if ("io.debezium.time.Timestamp".equals(schema.name())) {
+                        if (Objects.isNull(value)) {
+                            return JSON_NODE_FACTORY.numberNode((Long) value);
+                        }
+                        Long cur = LocalDateTime.ofInstant(Instant.ofEpochMilli((Long) value), TimeZone.getTimeZone("UTC").toZoneId()).toInstant(ZoneOffset.ofHours(8)).toEpochMilli();
+                        return JSON_NODE_FACTORY.numberNode(cur);
+                    }  else {
                         return JSON_NODE_FACTORY.numberNode((Integer) value);
                     }
                 case INT64:
                     if ("io.debezium.time.Date".equals(schema.name())) {
                         return JSON_NODE_FACTORY.textNode(LocalDate.ofEpochDay((Integer) value).format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+                    } else if ("io.debezium.time.Timestamp".equals(schema.name())) {
+                        if (Objects.isNull(value)) {
+                            return JSON_NODE_FACTORY.numberNode((Long) value);
+                        }
+                        Long cur = LocalDateTime.ofInstant(Instant.ofEpochMilli((Long) value), TimeZone.getTimeZone("UTC").toZoneId()).toInstant(ZoneOffset.ofHours(8)).toEpochMilli();
+                        return JSON_NODE_FACTORY.numberNode(cur);
                     } else {
                         return JSON_NODE_FACTORY.numberNode((Long) value);
                     }
