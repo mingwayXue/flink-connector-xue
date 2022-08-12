@@ -6,30 +6,38 @@ import com.xue.bigdata.test.util.DebeziumRecord;
 import com.xue.bigdata.test.util.HeyteaDebeziumDeserializationSchema;
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
 import org.apache.flink.api.java.utils.ParameterTool;
+import org.apache.flink.configuration.Configuration;
+import org.apache.flink.runtime.state.hashmap.HashMapStateBackend;
+import org.apache.flink.streaming.api.CheckpointingMode;
 import org.apache.flink.streaming.api.datastream.DataStreamSource;
+import org.apache.flink.streaming.api.environment.CheckpointConfig;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 
 public class Test01 {
     public static void main(String[] args) throws Exception {
         ParameterTool parameter = ParameterTool.fromPropertiesFile(Test01.class.getClassLoader().getResourceAsStream("application.properties"));
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
-//        env.enableCheckpointing(30000, CheckpointingMode.EXACTLY_ONCE);
-//        env.setStateBackend(new HashMapStateBackend());
-//        env.getCheckpointConfig().setCheckpointStorage("file:///bigdata/flink-1.14.4/chk-dirs/test01");
-//        env.getCheckpointConfig().setMaxConcurrentCheckpoints(1);
-//        env.getCheckpointConfig().setExternalizedCheckpointCleanup(CheckpointConfig.ExternalizedCheckpointCleanup.RETAIN_ON_CANCELLATION);
+        Configuration configuration = new Configuration();
+        //configuration.setString("execution.savepoint.path", "file:///workspace/github/flink-connector-xue/flink-connector-test/src/main/resources/test01/3f105a01434f7f21eed1423e449726ff/chk-2");
+        configuration.setString("execution.savepoint.path", "file:///workspace/github/flink-connector-xue/flink-connector-test/src/main/resources/test01/e724fb0ae0ee283fe83e9dfc6847c969/chk-4");
+
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.createLocalEnvironmentWithWebUI(configuration);
+        env.enableCheckpointing(30000, CheckpointingMode.EXACTLY_ONCE);
+        env.setStateBackend(new HashMapStateBackend());
+        env.getCheckpointConfig().setCheckpointStorage("file:///workspace/github/flink-connector-xue/flink-connector-test/src/main/resources/test01");
+        env.getCheckpointConfig().setMaxConcurrentCheckpoints(1);
+        env.getCheckpointConfig().setExternalizedCheckpointCleanup(CheckpointConfig.ExternalizedCheckpointCleanup.RETAIN_ON_CANCELLATION);
         env.setParallelism(1);
 
         MySqlSource<DebeziumRecord> mySqlSource = MySqlSource.<DebeziumRecord>builder()
                 .hostname(parameter.get("db.host"))
                 .port(3306)
                 .databaseList("platform")
-                .tableList("platform.fc01")
+                .tableList("platform.fc01,platform.fc02,platform.fc03")
                 .username(parameter.get("db.username"))
                 .password(parameter.get("db.password"))
                 .scanNewlyAddedTableEnabled(true)
                 .serverTimeZone("Asia/Shanghai")
-                .startupOptions(StartupOptions.initial())
+                .startupOptions(StartupOptions.latest())
                 .deserializer(new HeyteaDebeziumDeserializationSchema())
                 .build();
 

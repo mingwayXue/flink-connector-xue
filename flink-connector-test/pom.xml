@@ -19,6 +19,11 @@
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>org.apache.flink</groupId>
+            <artifactId>flink-runtime-web_2.12</artifactId>
+            <version>${flink.version}</version>
+        </dependency>
         <!--自定义 connector redis-->
         <dependency>
             <groupId>com.xue.bigdata</groupId>
@@ -37,6 +42,12 @@
             <artifactId>flink-oss-fs-hadoop</artifactId>
             <version>${flink.version}</version>
             <scope>${flink.scope}</scope>
+        </dependency>
+        <!--rocksdb-->
+        <dependency>
+            <groupId>org.apache.flink</groupId>
+            <artifactId>flink-statebackend-rocksdb_2.12</artifactId>
+            <version>${flink.version}</version>
         </dependency>
         <!--mysql相关-->
         <dependency>
@@ -59,7 +70,7 @@
         <!--flink cep-->
         <dependency>
             <groupId>org.apache.flink</groupId>
-            <artifactId>flink-cep_2.11</artifactId>
+            <artifactId>flink-cep_2.12</artifactId>
             <version>${flink.version}</version>
         </dependency>
         <!--flink cdc-->
