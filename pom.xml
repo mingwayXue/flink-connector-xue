@@ -9,7 +9,7 @@
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
     <modules>
-        <module>flink-connector-test</module>
+        <module>flink-test</module>
         <module>flink-connector-redis</module>
         <module>flink-format-protobuf</module>
     </modules>

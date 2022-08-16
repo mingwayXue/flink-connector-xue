@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>flink-connector-test</artifactId>
+    <artifactId>flink-test</artifactId>
 
     <properties>
         <mysql.version>8.0.16</mysql.version>
