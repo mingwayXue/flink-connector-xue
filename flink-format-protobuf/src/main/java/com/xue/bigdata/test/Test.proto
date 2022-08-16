@@ -1,6 +1,0 @@
-
-message Test {
-  string name = 1;
-  repeated string names = 2;
-  map<string, int32> si_map = 7;
-}

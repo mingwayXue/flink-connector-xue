@@ -11,9 +11,7 @@ import org.apache.flink.table.api.bridge.java.StreamTableEnvironment;
 public class ProtobufFormatTest {
     public static void main(String[] args) throws Exception {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.createLocalEnvironmentWithWebUI(new Configuration());
-
         env.setParallelism(1);
-
         StreamTableEnvironment tEnv = StreamTableEnvironment.create(env);
 
         String sourceTableSql = "CREATE TABLE protobuf_source ("
@@ -26,7 +24,7 @@ public class ProtobufFormatTest {
                 + "  'hostname' = 'localhost',\n"
                 + "  'port' = '9999',\n"
                 + "  'format' = 'protobuf',\n"
-                + "  'protobuf.class-name' = 'flink.examples.sql._04.format.formats.protobuf.Test'\n"
+                + "  'protobuf.class-name' = 'com.xue.bigdata.test.protobuf.Test'\n"
                 + ")";
 
         String sinkTableSql = "CREATE TABLE print_sink (\n"
@@ -44,7 +42,5 @@ public class ProtobufFormatTest {
         tEnv.executeSql(sourceTableSql);
         tEnv.executeSql(sinkTableSql);
         tEnv.executeSql(selectSql);
-
-        env.execute();
     }
 }

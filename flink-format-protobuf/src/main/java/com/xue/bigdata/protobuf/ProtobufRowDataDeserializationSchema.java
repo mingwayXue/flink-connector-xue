@@ -81,29 +81,6 @@ public class ProtobufRowDataDeserializationSchema extends AbstractDeserializatio
                 .createRowDataConverterByLogicalType(this.descriptor, this.expectedResultType);
     }
 
-    /**
-     * Creates a Protobuf deserialization descriptor for the given Protobuf descriptorBytes.
-     *
-     * @param descriptorBytes Protobuf descriptorBytes to deserialize Protobuf's message to Flink's row
-     * @param ignoreParseErrors
-     */
-//    public ProtobufRowDataDeserializationSchema(
-//            byte[] descriptorBytes
-//            , boolean ignoreParseErrors
-//            , RowType expectedResultType) {
-//        this.ignoreParseErrors = ignoreParseErrors;
-//        Preconditions.checkNotNull(descriptorBytes, "Protobuf descriptorBytes must not be null.");
-//        this.messageClazz = null;
-//        this.descriptorBytes = descriptorBytes;
-//        this.descriptor = ProtobufUtils.getDescriptor(descriptorBytes);
-////        this.typeInfo = (RowTypeInfo) ProtobufSchemaConverter.convertToTypeInfo(this.descriptor);
-//        this.defaultInstance = DynamicMessage.newBuilder(this.descriptor).getDefaultInstanceForType();
-////        this.runtimeConverter = new ProtobufToRowDataConverters(true)
-////                .createRowDataConverter(this.descriptor, this.typeInfo, null);
-//
-//        this.expectedResultType = expectedResultType;
-//    }
-
     @Override
     public RowData deserialize(byte[] bytes) throws IOException {
         if (bytes == null) {

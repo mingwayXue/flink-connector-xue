@@ -14,3 +14,4 @@
 # limitations under the License.
 
 com.xue.bigdata.redis.RedisDynamicTableFactory
+com.xue.bigdata.socket.SocketDynamicTableFactory

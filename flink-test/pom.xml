@@ -16,6 +16,8 @@
         <httpclient.version>4.5.13</httpclient.version>
         <fastjson.version>1.2.78</fastjson.version>
         <druid.version>1.2.5</druid.version>
+        <protobuf-java.version>3.19.2</protobuf-java.version>
+        <grpc-java.version>1.24.0</grpc-java.version>
     </properties>
 
     <dependencies>
@@ -28,6 +30,12 @@
         <dependency>
             <groupId>com.xue.bigdata</groupId>
             <artifactId>flink-connector-redis</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <!--自定义 connector format-->
+        <dependency>
+            <groupId>com.xue.bigdata</groupId>
+            <artifactId>flink-format-protobuf</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
         <!--kafka-->
@@ -86,6 +94,12 @@
             <artifactId>flink-json</artifactId>
             <version>${flink.version}</version>
         </dependency>
+        <!--protobuf-->
+        <dependency>
+            <groupId>com.googlecode.protobuf-java-format</groupId>
+            <artifactId>protobuf-java-format</artifactId>
+            <version>1.2</version>
+        </dependency>
 
         <!--日志相关-->
         <dependency>
@@ -109,5 +123,43 @@
             <version>2.9.1</version>
         </dependency>
     </dependencies>
+
+    <build>
+        <extensions>
+            <extension>
+                <groupId>kr.motd.maven</groupId>
+                <artifactId>os-maven-plugin</artifactId>
+                <version>1.5.0.Final</version>
+            </extension>
+        </extensions>
+        <plugins>
+            <!--protobuf插件-->
+            <plugin>
+                <groupId>org.xolstice.maven.plugins</groupId>
+                <artifactId>protobuf-maven-plugin</artifactId>
+                <version>0.5.1</version>
+                <configuration>
+                    <protocArtifact>com.google.protobuf:protoc:${protobuf-java.version}:exe:${os.detected.classifier}</protocArtifact>
+                    <pluginId>grpc-java</pluginId>
+                    <pluginArtifact>io.grpc:protoc-gen-grpc-java:${grpc-java.version}:exe:${os.detected.classifier}</pluginArtifact>
+                    <!--默认值-->
+                    <protoSourceRoot>${project.basedir}/src/main/proto</protoSourceRoot>
+                    <!--默认值-->
+                    <outputDirectory>${project.basedir}/src/main/java</outputDirectory>
+                    <!--设置是否在生成java文件之前清空outputDirectory的文件，默认值为true，设置为false时也会覆盖同名文件-->
+                    <clearOutputDirectory>false</clearOutputDirectory>
+                    <!--更多配置信息可以查看https://www.xolstice.org/protobuf-maven-plugin/compile-mojo.html-->
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>compile</goal>
+                            <goal>compile-custom</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>
