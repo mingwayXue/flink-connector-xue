@@ -11,17 +11,18 @@
 
     <artifactId>flink-format-protobuf</artifactId>
 
-    <dependencies>
+    <properties>
+        <protobuf-java.version>3.19.2</protobuf-java.version>
+        <grpc-java.version>1.24.0</grpc-java.version>
+        <protoc-gen-grpc-java.version>1.43.2</protoc-gen-grpc-java.version>
+        <proto-google-common-protos.version>1.17.0</proto-google-common-protos.version>
+    </properties>
 
+    <dependencies>
         <dependency>
             <groupId>com.google.protobuf</groupId>
             <artifactId>protobuf-java</artifactId>
-            <version>3.6.1</version>
-        </dependency>
-        <dependency>
-            <groupId>com.google.protobuf</groupId>
-            <artifactId>protobuf-java</artifactId>
-            <version>3.6.1</version>
+            <version>${protobuf-java.version}</version>
         </dependency>
         <dependency>
             <groupId>joda-time</groupId>
@@ -29,5 +30,39 @@
             <version>2.10.12</version>
         </dependency>
     </dependencies>
+
+
+    <build>
+        <extensions>
+            <extension>
+                <groupId>kr.motd.maven</groupId>
+                <artifactId>os-maven-plugin</artifactId>
+                <version>1.5.0.Final</version>
+            </extension>
+        </extensions>
+        <plugins>
+            <!--protobuf插件-->
+            <plugin>
+                <groupId>org.xolstice.maven.plugins</groupId>
+                <artifactId>protobuf-maven-plugin</artifactId>
+                <version>0.5.1</version>
+                <configuration>
+                    <protocArtifact>com.google.protobuf:protoc:${protobuf-java.version}:exe:${os.detected.classifier}
+                    </protocArtifact>
+                    <pluginId>grpc-java</pluginId>
+                    <pluginArtifact>io.grpc:protoc-gen-grpc-java:${grpc-java.version}:exe:${os.detected.classifier}
+                    </pluginArtifact>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>compile</goal>
+                            <goal>compile-custom</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>
