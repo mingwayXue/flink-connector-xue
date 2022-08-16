@@ -9,7 +9,7 @@ public class OssTest01 {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.createLocalEnvironmentWithWebUI(new Configuration());
         env.setParallelism(1);
 
-        DataStreamSource<String> stringDataStreamSource = env.socketTextStream("172.24.19.27", 9999);
+        DataStreamSource<String> stringDataStreamSource = env.socketTextStream("127.0.0.1", 9999);
 
         // stringDataStreamSource.print();
 
