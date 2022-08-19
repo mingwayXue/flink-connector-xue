@@ -18,6 +18,7 @@
         <flink.version>1.14.3</flink.version>
         <java.version>1.8</java.version>
         <scala.bin.version>2.11</scala.bin.version>
+        <iceberg.version>0.14.0</iceberg.version>
     </properties>
 
     <dependencies>

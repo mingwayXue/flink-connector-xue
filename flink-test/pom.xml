@@ -21,11 +21,6 @@
     </properties>
 
     <dependencies>
-        <dependency>
-            <groupId>org.apache.flink</groupId>
-            <artifactId>flink-runtime-web_2.12</artifactId>
-            <version>${flink.version}</version>
-        </dependency>
         <!--自定义 connector redis-->
         <dependency>
             <groupId>com.xue.bigdata</groupId>
@@ -37,12 +32,6 @@
             <groupId>com.xue.bigdata</groupId>
             <artifactId>flink-format-protobuf</artifactId>
             <version>1.0-SNAPSHOT</version>
-        </dependency>
-        <!--kafka-->
-        <dependency>
-            <groupId>org.apache.flink</groupId>
-            <artifactId>flink-connector-kafka_2.12</artifactId>
-            <version>${flink.version}</version>
         </dependency>
         <!--oss state backend-->
         <dependency>
@@ -56,13 +45,6 @@
             <groupId>org.apache.flink</groupId>
             <artifactId>flink-statebackend-rocksdb_2.12</artifactId>
             <version>${flink.version}</version>
-        </dependency>
-        <!--jdbc-->
-        <dependency>
-            <groupId>org.apache.flink</groupId>
-            <artifactId>flink-connector-jdbc_${scala.bin.version}</artifactId>
-            <version>${flink.version}</version>
-            <scope>${flink.scope}</scope>
         </dependency>
         <!--mysql相关-->
         <dependency>
@@ -112,6 +94,13 @@
             <groupId>com.github.jsqlparser</groupId>
             <artifactId>jsqlparser</artifactId>
             <version>4.5</version>
+        </dependency>
+        <!--iceberg-->
+        <dependency>
+            <groupId>org.apache.iceberg</groupId>
+            <artifactId>iceberg-flink</artifactId>
+            <version>${iceberg.version}</version>
+            <scope>${flink.scope}</scope>
         </dependency>
 
         <!--日志相关-->
