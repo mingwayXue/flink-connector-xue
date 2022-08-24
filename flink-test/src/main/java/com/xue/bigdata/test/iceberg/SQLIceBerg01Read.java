@@ -6,7 +6,7 @@ import org.apache.flink.streaming.api.CheckpointingMode;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.table.api.bridge.java.StreamTableEnvironment;
 
-public class SQLSinkIceBerg01 {
+public class SQLIceBerg01Read {
     public static void main(String[] args) throws Exception {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.createLocalEnvironmentWithWebUI(new Configuration());
         env.enableCheckpointing(10000, CheckpointingMode.EXACTLY_ONCE);
@@ -29,7 +29,7 @@ public class SQLSinkIceBerg01 {
 
         tableEnv.executeSql("use ice_db");
 
-        tableEnv.executeSql("select * from ice_catalog.ice_db.iceberg_002").print();
+        tableEnv.executeSql("select id,count(1 ) from ice_catalog.ice_db.iceberg_001 group by id").print();
 
     }
 }
