@@ -20,6 +20,7 @@ public class TestSQL01 {
                 "  `no` STRING,\n" +
                 "  `created_at` BIGINT,\n" +
                 "  `time_ltz` AS TO_TIMESTAMP_LTZ(`created_at`, 3)," +
+                "  `into_date` AS TO_DATE(FROM_UNIXTIME(created_at/1000)), " +
                 // "  WATERMARK FOR time_ltz AS time_ltz - INTERVAL '5' SECOND" + // 指定事件事件
                 "  time_proc AS PROCTIME()" + // 指定处理时间
                 ") WITH (\n" +
