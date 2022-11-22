@@ -25,6 +25,16 @@ public class JDBCSourceBuilder {
         return this;
     }
 
+    public JDBCSourceBuilder driver(String driver) {
+        config.setDriver(driver);
+        return this;
+    }
+
+    public JDBCSourceBuilder url(String url) {
+        config.setUrl(url);
+        return this;
+    }
+
     public JDBCSourceBuilder fetchSize(int fetchSize) {
         config.setFetchSize(fetchSize);
         return this;

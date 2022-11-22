@@ -10,6 +10,8 @@ public class JDBCConfig implements Serializable {
     private String hostname;
     private String username;
     private String password;
+    private String driver;
+    private String url;
 
     private int fetchSize;
     private List<String> sqlList;
@@ -60,5 +62,21 @@ public class JDBCConfig implements Serializable {
 
     public void setSqlList(List<String> sqlList) {
         this.sqlList = sqlList;
+    }
+
+    public String getDriver() {
+        return driver;
+    }
+
+    public void setDriver(String driver) {
+        this.driver = driver;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 }

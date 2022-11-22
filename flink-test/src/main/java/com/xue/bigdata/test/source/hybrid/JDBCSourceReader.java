@@ -14,10 +14,7 @@ public class JDBCSourceReader extends SingleThreadMultiplexSourceReaderBase<JSON
         super(
                 () -> new JDBCSplitReader(config),
                 (element, output, splitState) -> {
-                    System.out.println(element);
-                    // todo 发送到下游的方法
-                    /*output.collect(element.getRecord());
-                    splitState.setPosition(element);*/
+                    output.collect(element.toJSONString());
                 },
                 context.getConfiguration(),
                 context);
