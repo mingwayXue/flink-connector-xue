@@ -21,6 +21,8 @@ public class JDBCSourceSplitSerializer implements SimpleVersionedSerializer<JDBC
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         DataOutputViewStreamWrapper view = new DataOutputViewStreamWrapper(out);
         view.writeUTF(split.splitId());
+        view.writeUTF(split.getDb());
+        view.writeUTF(split.getTable());
         view.writeUTF(split.getSql());
         return out.toByteArray();
     }
@@ -30,7 +32,9 @@ public class JDBCSourceSplitSerializer implements SimpleVersionedSerializer<JDBC
         ByteArrayInputStream in = new ByteArrayInputStream(serialized);
         DataInputViewStreamWrapper view = new DataInputViewStreamWrapper(in);
         String splitId = view.readUTF();
+        String db = view.readUTF();
+        String table = view.readUTF();
         String sql = view.readUTF();
-        return new JDBCSplit(sql);
+        return new JDBCSplit(db, table, sql);
     }
 }

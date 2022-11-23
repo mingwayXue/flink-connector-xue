@@ -54,6 +54,7 @@ public class JDBCSplitReader implements SplitReader<JSONObject, JDBCSplit> {
      * @return
      */
     private Iterator<JSONObject> pollSplitRecords(JDBCSplit nextSplit) {
+        // todo 可优化成一个实例变量
         try (JDBCConnection jdbc = JDBCConnection.openJdbcConnection(jdbcConfig)) {
             List<JSONObject> list = jdbc.findAll(nextSplit.getSql());
             return list.iterator();

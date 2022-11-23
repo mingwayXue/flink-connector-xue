@@ -9,11 +9,25 @@ public class JDBCSplit implements SourceSplit {
 
     protected final String splitId;
 
+    protected final String db;
+
+    protected final String table;
+
     private final String sql;
 
-    public JDBCSplit(String sql) {
+    public JDBCSplit(String db, String table, String sql) {
+        this.db = db;
+        this.table = table;
         this.sql = sql;
         this.splitId = DigestUtils.md5Hex(sql);
+    }
+
+    public String getDb() {
+        return db;
+    }
+
+    public String getTable() {
+        return table;
     }
 
     public String getSql() {

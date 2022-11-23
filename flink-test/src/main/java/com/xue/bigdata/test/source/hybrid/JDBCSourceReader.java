@@ -14,7 +14,8 @@ public class JDBCSourceReader extends SingleThreadMultiplexSourceReaderBase<JSON
         super(
                 () -> new JDBCSplitReader(config),
                 (element, output, splitState) -> {
-                    output.collect(element.toJSONString());
+                    TableLogRecord log = new TableLogRecord(splitState.split, element);
+                    output.collect(JSONObject.toJSONString(log));
                 },
                 context.getConfiguration(),
                 context);
@@ -35,7 +36,7 @@ public class JDBCSourceReader extends SingleThreadMultiplexSourceReaderBase<JSON
 
     @Override
     protected JDBCSplitState initializedState(JDBCSplit split) {
-        return null;
+        return new JDBCSplitState(split);
     }
 
     @Override

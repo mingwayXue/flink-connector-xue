@@ -40,7 +40,7 @@ public class JDBCSourceBuilder {
         return this;
     }
 
-    public JDBCSourceBuilder sqlList(List<String> sqlList) {
+    public JDBCSourceBuilder sqlList(List<TableSelect> sqlList) {
         config.setSqlList(sqlList);
         return this;
     }

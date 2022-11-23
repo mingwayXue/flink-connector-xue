@@ -14,7 +14,7 @@ public class JDBCConfig implements Serializable {
     private String url;
 
     private int fetchSize;
-    private List<String> sqlList;
+    private List<TableSelect> sqlList;
 
     public int getPort() {
         return port;
@@ -56,11 +56,11 @@ public class JDBCConfig implements Serializable {
         this.fetchSize = fetchSize;
     }
 
-    public List<String> getSqlList() {
+    public List<TableSelect> getSqlList() {
         return sqlList;
     }
 
-    public void setSqlList(List<String> sqlList) {
+    public void setSqlList(List<TableSelect> sqlList) {
         this.sqlList = sqlList;
     }
 

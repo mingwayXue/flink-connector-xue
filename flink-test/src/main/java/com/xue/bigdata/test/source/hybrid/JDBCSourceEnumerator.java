@@ -66,10 +66,10 @@ public class JDBCSourceEnumerator implements SplitEnumerator<JDBCSplit, PendingS
 
     private void splitChunksForSqlList() {
         try {
-            for (String sql : config.getSqlList()) {
+            for (TableSelect ts : config.getSqlList()) {
                 // todo 待优化，可根据 fetchSize 分片查询
                 synchronized (lock) {
-                    remainingSplits.add(new JDBCSplit(sql));
+                    remainingSplits.add(new JDBCSplit(ts.getDb(), ts.getTable(), ts.getSelectSql()));
                     lock.notify();
                 }
             }
