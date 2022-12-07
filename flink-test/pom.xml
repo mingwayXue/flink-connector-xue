@@ -184,6 +184,11 @@
             <version>0.3-SNAPSHOT</version>
         </dependency>
         <!-- flink table store end -->
+        <!--<dependency>
+            <groupId>org.codehaus.janino</groupId>
+            <artifactId>janino</artifactId>
+            <version>3.0.11</version>
+        </dependency>-->
 
         <!--日志相关-->
         <dependency>
