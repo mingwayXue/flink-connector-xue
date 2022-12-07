@@ -21,7 +21,10 @@ public class JaninoTest01 {
             strings[i] = "res" + i;
             classes[i] = Boolean.class;
         }
+        // 设置参数及参数类型
         evaluator.setParameters(strings, classes);
+        // 设置返回值类型
+        evaluator.setReturnType(Boolean.class);
         evaluator.cook(str);
 
         Object ret = evaluator.evaluate(objects);
