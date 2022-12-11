@@ -1,13 +1,12 @@
 package com.xue.bigdata.test.source.hybrid;
 
-import com.ververica.cdc.connectors.mysql.source.split.MySqlSnapshotSplit;
 import org.apache.flink.api.connector.source.SplitEnumerator;
 import org.apache.flink.api.connector.source.SplitEnumeratorContext;
 import org.apache.flink.shaded.guava30.com.google.common.util.concurrent.ThreadFactoryBuilder;
-import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
