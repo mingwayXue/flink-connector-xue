@@ -20,7 +20,7 @@ public class DataStreamIceBergRead01 {
     public static void main(String[] args) throws Exception {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.createLocalEnvironmentWithWebUI(new org.apache.flink.configuration.Configuration());
         env.enableCheckpointing(10000, CheckpointingMode.EXACTLY_ONCE);
-        env.getCheckpointConfig().setCheckpointStorage("file:///workspace/github/flink-connector-xue/flink-test/src/main/resources");
+        env.getCheckpointConfig().setCheckpointStorage("file:///xue/workspace/github/flink-connector-xue/flink-test/src/main/resources");
         // env.setRuntimeMode(RuntimeExecutionMode.BATCH);
         env.setParallelism(1);
 

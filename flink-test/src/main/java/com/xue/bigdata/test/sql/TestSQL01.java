@@ -28,14 +28,20 @@ public class TestSQL01 {
                 "  'topic' = 'ods_db_production__mt_orders',\n" +
                 "  'properties.bootstrap.servers' = '" + parameter.get("bootstrap.servers") + "',\n" +
                 "  'properties.group.id' = 'test-xue',\n" +
-                "  'scan.startup.mode' = 'latest-offset',\n" +
+                "  'scan.startup.mode' = 'earliest-offset',\n" +
 //                "  'scan.startup.mode' = 'timestamp',\n" +
 //                "  'scan.startup.timestamp-millis' = '1660096800000',\n" +
                 "  'format' = 'debezium-json'\n" +
                 ")";
+        String sinkSql = "CREATE TABLE sink_table (\n" +
+                "    id BIGINT " +
+                ") WITH (\n" +
+                "  'connector' = 'print'\n" +
+                ")";
         tableEnv.executeSql(createSourceSql);
+        tableEnv.executeSql(sinkSql);
 
-        tableEnv.executeSql("select * from mt_orders").print();
+        tableEnv.executeSql("insert into sink_table select id from mt_orders");
         // tableEnv.executeSql("SELECT TUMBLE_START(time_ltz, INTERVAL '1' MINUTE), COUNT(DISTINCT shop_id) FROM mt_orders GROUP BY TUMBLE(time_ltz, INTERVAL '1' MINUTE)").print();
     }
 }
