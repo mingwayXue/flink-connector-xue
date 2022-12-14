@@ -40,9 +40,10 @@ public class TestChangeLogStream01 {
         StreamTableEnvironment tableEnv = StreamTableEnvironment.create(env);
 
         /**
-         * {"id":1,"name":"a"}
-         * {"id":2,"name":"b"}
-         * {"id":3,"name":"c"}
+         * {"id":1,"name":"a","amt":3.1}
+         * {"id":2,"name":"b","amt":9.0}
+         * {"id":3,"name":"c","amt":3.1}
+         * {"id":4,"name":"b","amt":14.0}
          */
         KafkaSource<String> kafkaSource = KafkaSource.<String>builder()
                 .setBootstrapServers("10.6.1.16:9092")
@@ -57,7 +58,9 @@ public class TestChangeLogStream01 {
                 .setProperty("auto.commit.interval.ms", "1000")
                 .build();
 
-        DataStreamSource<String> kafka = env.fromSource(kafkaSource, WatermarkStrategy.noWatermarks(), "KAFKA");
+        // DataStreamSource<String> kafka = env.fromSource(kafkaSource, WatermarkStrategy.noWatermarks(), "KAFKA");
+
+        DataStreamSource<String> kafka = env.socketTextStream("172.24.19.27", 9999);
 
         DataStream<Row> rowStream = kafka.map(new MapFunction<String, JSONObject>() {
                     @Override
@@ -89,9 +92,10 @@ public class TestChangeLogStream01 {
                         jsonState.update(json);
                         row.setField("id", json.get("id"));
                         row.setField("name", json.get("name"));
+                        row.setField("amt", json.get("amt"));
                         out.collect(row);
                     }
-                }).returns(Types.ROW_NAMED(new String[]{"id", "name"}, Types.INT, Types.STRING));
+                }).returns(Types.ROW_NAMED(new String[]{"id", "name", "amt"}, Types.INT, Types.STRING, Types.BIG_DEC));
         // .returns(new RowTypeInfo(TypeInformation.of(RowKind.class), Types.INT, Types.STRING));
 
         // rowStream.printToErr();
@@ -99,17 +103,20 @@ public class TestChangeLogStream01 {
 
         Table table1 = tableEnv.fromChangelogStream(rowStream,
                 Schema.newBuilder()
-//                        .primaryKey("id")
-                        .column("id", "INT")
+                        .primaryKey("id")
+                        .column("id", "INT NOT NULL")
                         .column("name", "STRING")
-                        .build());
+                        .column("amt", "DECIMAL")
+                        .build(),
+                ChangelogMode.upsert()
+        );
 
         /*table1.printSchema();
         table1.execute().print();*/
 
 
         tableEnv.createTemporaryView("test", table1);
-        tableEnv.executeSql("select name,sum(id) from test group by name").print();
+        tableEnv.executeSql("select name,sum(amt) from test group by name").print();
 
         // env.execute("TestChangeLogStream01");
     }
